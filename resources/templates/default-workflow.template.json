@@ -1,0 +1,14 @@
+{
+  "workflows": [
+    {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "name": "Concert 32 pistes - MVP",
+      "renameTemplateId": "00000000-0000-0000-0000-000000000010",
+      "processingTemplateId": "00000000-0000-0000-0000-000000000020",
+      "exportTemplateId": "00000000-0000-0000-0000-000000000030"
+    }
+  ],
+  "renaming": [],
+  "processing": [],
+  "export": []
+}

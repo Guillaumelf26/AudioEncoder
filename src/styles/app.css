@@ -1,0 +1,172 @@
+:root {
+  color: #f5f7ff;
+  background: #111420;
+  font-family: Inter, Segoe UI, system-ui, Arial, sans-serif;
+  line-height: 1.4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  border-right: 1px solid #2d3245;
+  padding: 16px;
+  background: #171b2a;
+}
+
+.sidebar h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.muted {
+  color: #9ca3ba;
+}
+
+nav {
+  display: grid;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.nav-item {
+  border: 1px solid #3a415e;
+  background: #1d2235;
+  color: #d9def1;
+  border-radius: 8px;
+  text-align: left;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.nav-item.active {
+  border-color: #7f9bff;
+  background: #2a3152;
+}
+
+.content {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+}
+
+.card {
+  background: #171b2a;
+  border: 1px solid #2d3245;
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.input {
+  min-width: 220px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #3a415e;
+  background: #111420;
+  color: #f0f3ff;
+}
+
+.btn,
+.btn-secondary {
+  border-radius: 8px;
+  border: 1px solid #5a78f0;
+  background: #3d5ce0;
+  color: #fff;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  border-color: #5b5f71;
+  background: #2f3345;
+}
+
+.btn:disabled,
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.table th,
+.table td {
+  border-bottom: 1px solid #2d3245;
+  text-align: left;
+  padding: 8px;
+  font-size: 13px;
+}
+
+.kv-grid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 6px;
+}
+
+.log-list {
+  max-height: 420px;
+  overflow: auto;
+  display: grid;
+  gap: 8px;
+}
+
+.log-entry {
+  border: 1px solid #2f3448;
+  background: #111420;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.log-entry header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.log-entry.info {
+  border-color: #2e4f9f;
+}
+
+.log-entry.warn {
+  border-color: #b08024;
+}
+
+.log-entry.error {
+  border-color: #c43f3f;
+}
+
+pre {
+  overflow: auto;
+  background: #0c0f19;
+  border: 1px solid #2d3245;
+  border-radius: 6px;
+  padding: 8px;
+  color: #dce4ff;
+}
