@@ -161,8 +161,19 @@ pub enum NameConflictStrategy {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(tag = "type", rename_all = "camelCase")]
+#[serde(tag = "type", rename_all = "camelCase", rename_all_fields = "camelCase")]
 pub enum ProcessingOperation {
+    ProcessTrack {
+        input_track_id: String,
+        output_file_name: String,
+        gain_db: Option<f32>,
+        pan: Option<f32>,
+        reverb: Option<ReverbSettings>,
+    },
+    MixToStereoPanned {
+        inputs: Vec<PannedTrackInput>,
+        output_file_name: String,
+    },
     MergeToStereo {
         input_left_track_id: String,
         input_right_track_id: String,
@@ -199,6 +210,20 @@ pub enum ProcessingOperation {
         output_file_name: String,
         mode: String,
     },
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ReverbSettings {
+    pub delay_ms: u32,
+    pub decay: f32,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PannedTrackInput {
+    pub input_track_id: String,
+    pub pan: f32,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

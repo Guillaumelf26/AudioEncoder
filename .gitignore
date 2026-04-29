@@ -1,6 +1,16 @@
-node_modules
-dist
+node_modules/
+dist/
 .DS_Store
 *.log
-src-tauri/target
-src-tauri/gen
+
+# Rust / Tauri build outputs
+src-tauri/target/
+src-tauri/gen/
+
+# IDE / OS
+.vscode/
+.idea/
+Thumbs.db
+
+# Tauri dev artefacts
+src-tauri/Cargo.lock.bak

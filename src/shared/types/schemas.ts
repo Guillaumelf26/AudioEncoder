@@ -49,6 +49,31 @@ export const renameTemplateSchema = z.object({
 
 export const processingOperationSchema = z.discriminatedUnion("type", [
   z.object({
+    type: z.literal("processTrack"),
+    inputTrackId: z.string(),
+    outputFileName: z.string().min(1),
+    gainDb: z.number().optional(),
+    pan: z.number().min(-1).max(1).optional(),
+    reverb: z
+      .object({
+        delayMs: z.number().positive(),
+        decay: z.number().min(0).max(1)
+      })
+      .optional()
+  }),
+  z.object({
+    type: z.literal("mixToStereoPanned"),
+    inputs: z
+      .array(
+        z.object({
+          inputTrackId: z.string(),
+          pan: z.number().min(-1).max(1)
+        })
+      )
+      .min(1),
+    outputFileName: z.string().min(1)
+  }),
+  z.object({
     type: z.literal("mergeToStereo"),
     inputLeftTrackId: z.string(),
     inputRightTrackId: z.string(),

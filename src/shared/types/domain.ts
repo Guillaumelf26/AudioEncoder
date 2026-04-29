@@ -102,7 +102,33 @@ export interface RenameTemplate {
   conflictStrategy: NameConflictStrategy;
 }
 
+export interface RenameTrackRequest {
+  trackId: string;
+  targetName: string;
+}
+
+export interface ReverbSettings {
+  delayMs: number;
+  decay: number;
+}
+
 export type ProcessingOperation =
+  | {
+      type: "processTrack";
+      inputTrackId: string;
+      outputFileName: string;
+      gainDb?: number;
+      pan?: number;
+      reverb?: ReverbSettings;
+    }
+  | {
+      type: "mixToStereoPanned";
+      inputs: Array<{
+        inputTrackId: string;
+        pan: number;
+      }>;
+      outputFileName: string;
+    }
   | {
       type: "mergeToStereo";
       inputLeftTrackId: string;

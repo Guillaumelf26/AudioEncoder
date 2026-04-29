@@ -10,10 +10,12 @@ mod storage;
 mod validation;
 
 use commands::project_commands::{
-    analyze_source_files, check_toolchain, create_project, load_project, save_project,
+    analyze_source_files, append_log_entry, check_toolchain, create_project, create_session_project,
+    load_project, save_project,
 };
 use commands::workflow_commands::{
-    execute_export_operation, execute_processing_operation, load_templates, save_templates,
+    apply_track_renaming, execute_export_operation, execute_processing_operation, list_directory_files,
+    load_templates, reveal_in_explorer, save_templates,
 };
 
 fn main() {
@@ -23,13 +25,18 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             check_toolchain,
             create_project,
+            create_session_project,
             load_project,
             save_project,
             analyze_source_files,
+            append_log_entry,
             load_templates,
             save_templates,
+            apply_track_renaming,
             execute_processing_operation,
-            execute_export_operation
+            execute_export_operation,
+            list_directory_files,
+            reveal_in_explorer
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

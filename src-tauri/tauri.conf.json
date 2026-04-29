@@ -15,16 +15,26 @@
         "title": "Audio Workflow",
         "width": 1500,
         "height": 920,
+        "minWidth": 1024,
+        "minHeight": 720,
         "resizable": true
       }
     ],
     "security": {
-      "csp": null
+      "csp": "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' ipc: http://ipc.localhost"
     }
   },
   "bundle": {
     "active": true,
     "targets": "nsis",
+    "publisher": "AudioEncoder",
+    "copyright": "Copyright (c) 2026 AudioEncoder",
+    "category": "Music",
+    "shortDescription": "Workflow audio multipiste base sur FFmpeg",
+    "longDescription": "Application desktop pour automatiser le workflow audio multipiste : import/analyse de WAV, renommage en bulk, traitements (gain, pan, reverb, merges) et export WAV/MP3/AAC via FFmpeg.",
+    "icon": [
+      "icons/icon.ico"
+    ],
     "windows": {
       "certificateThumbprint": null,
       "digestAlgorithm": "sha256",

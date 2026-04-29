@@ -8,8 +8,9 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .ts,.tsx",
-    "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build"
+    "tauri:dev": "powershell -ExecutionPolicy Bypass -File scripts/tauri-dev.ps1",
+    "tauri:build": "tauri build",
+    "tauri:env-check": "powershell -ExecutionPolicy Bypass -File scripts/tauri-dev.ps1 -CheckOnly"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.0.0",

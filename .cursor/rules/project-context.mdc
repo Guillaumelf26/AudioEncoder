@@ -1,0 +1,44 @@
+---
+description: Contexte essentiel AudioEncoder MVP
+alwaysApply: true
+---
+
+# AudioEncoder - Contexte Projet
+
+- Application desktop Windows-first pour workflow audio multipiste.
+- Stack: Tauri v2 + React + TypeScript + backend Rust.
+- Objectif MVP: import/analyse WAV deja separes, renommage, traitements (merge/pan/gain), export WAV/MP3/AAC.
+- Hors MVP: split multicanal, normalisation, compression avancee.
+
+# Commandes utiles
+
+- Dev desktop: `npm run tauri:dev`
+- Verif environnement Tauri: `npm run tauri:env-check`
+- Front web seul (sans backend Tauri): `npm run dev`
+- Lint/build: `npm run lint`, `npm run build`
+
+# Architecture principale
+
+- Frontend: `src/`
+- API bridge Tauri: `src/shared/api/tauriClient.ts`
+- Types domaine: `src/shared/types/domain.ts`
+- Backend commandes: `src-tauri/src/commands/`
+- Moteur FFmpeg/FFprobe: `src-tauri/src/audio_engine/` et `src-tauri/src/media_probe/`
+- Persistance JSON: `src-tauri/src/storage/`
+
+# Contraintes fonctionnelles
+
+- Projets avec dossiers: `01_sources`, `03_renamed`, `04_processed`, `05_exports`, `logs`.
+- Ne jamais modifier les originaux carte SD.
+- Templates globaux locaux + import/export JSON.
+
+# Points sensibles connus
+
+- Si `invoke` est indisponible, l'app est lancee en mode web (`npm run dev`) au lieu de Tauri.
+- Verification outils tente resolution + auto-install Windows via winget.
+- L'import/analyse tente aussi resolution/auto-install de ffprobe avant echec.
+
+# Attendu UX
+
+- Toujours logger erreurs/action dans l'onglet Logs.
+- En cas de bug UI "rien ne se passe", prioriser try/catch + message utilisateur explicite.

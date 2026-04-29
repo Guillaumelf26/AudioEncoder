@@ -3,24 +3,22 @@ use crate::process_runner::runner::run_process;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct ProbeAudioStream {
     pub codec_name: Option<String>,
     pub channels: Option<u16>,
     pub sample_rate: Option<String>,
     pub bits_per_sample: Option<u16>,
+    pub bits_per_raw_sample: Option<String>,
     pub channel_layout: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct ProbeFormat {
     pub duration: Option<String>,
     pub size: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct ProbeResponse {
     pub streams: Vec<ProbeAudioStream>,
     pub format: ProbeFormat,

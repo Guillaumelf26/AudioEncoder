@@ -2,6 +2,7 @@ use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum AppError {
+    #[allow(dead_code)]
     #[error("Chemin invalide: {0}")]
     InvalidPath(String),
     #[error("Echec exécution processus: {0}")]
@@ -12,6 +13,7 @@ pub enum AppError {
     InvalidJson(String),
     #[error("Validation échouée: {0}")]
     Validation(String),
+    #[allow(dead_code)]
     #[error("Erreur interne: {0}")]
     Internal(String),
 }

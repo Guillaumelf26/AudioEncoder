@@ -9,6 +9,105 @@ pub fn build_processing_command(
     operation: &ProcessingOperation,
 ) -> Result<FFmpegCommand, AppError> {
     match operation {
+        ProcessingOperation::ProcessTrack {
+            input_track_id,
+            output_file_name,
+            gain_db,
+            pan,
+            reverb,
+        } => {
+            let mut filters: Vec<String> = Vec::new();
+            if let Some(value) = gain_db {
+                if value.abs() > 0.001 {
+                    filters.push(format!("volume={value:+}dB"));
+                }
+            }
+            if let Some(value) = pan {
+                let p = value.clamp(-1.0, 1.0);
+                if p.abs() > 0.001 {
+                    let left_gain = ((1.0 - p) / 2.0) + 0.5;
+                    let right_gain = ((1.0 + p) / 2.0) + 0.5;
+                    filters.push(format!(
+                        "pan=stereo|c0={left_gain:.3}*c0|c1={right_gain:.3}*c0"
+                    ));
+                }
+            }
+            if let Some(reverb_settings) = reverb {
+                let delay = reverb_settings.delay_ms.max(10);
+                let decay = reverb_settings.decay.clamp(0.0, 1.0);
+                filters.push(format!("aecho=0.8:0.9:{delay}:{decay}"));
+            }
+
+            if filters.is_empty() {
+                return Err(AppError::Validation(
+                    "ProcessTrack sans aucun effet (gain/pan/reverb)".to_string(),
+                ));
+            }
+
+            Ok(FFmpegCommand {
+                binary: ffmpeg_bin.to_string(),
+                args: vec![
+                    "-y".to_string(),
+                    "-i".to_string(),
+                    format!("{input_base_dir}/{input_track_id}.wav"),
+                    "-af".to_string(),
+                    filters.join(","),
+                    "-c:a".to_string(),
+                    "pcm_s24le".to_string(),
+                    format!("{output_base_dir}/{output_file_name}"),
+                ],
+                description: "Appliquer la chaine d'effets sur une piste".to_string(),
+                step_name: "processing:processTrack".to_string(),
+            })
+        }
+        ProcessingOperation::MixToStereoPanned {
+            inputs,
+            output_file_name,
+        } => {
+            if inputs.is_empty() {
+                return Err(AppError::Validation(
+                    "MixToStereoPanned requiert au moins une piste".to_string(),
+                ));
+            }
+
+            let mut args = vec!["-y".to_string()];
+            for input in inputs {
+                args.push("-i".to_string());
+                args.push(format!("{input_base_dir}/{}.wav", input.input_track_id));
+            }
+
+            let mut filter_parts: Vec<String> = Vec::new();
+            let mut mix_refs = String::new();
+            for (index, input) in inputs.iter().enumerate() {
+                let p = input.pan.clamp(-1.0, 1.0);
+                let left_gain = ((1.0 - p) / 2.0) + 0.5;
+                let right_gain = ((1.0 + p) / 2.0) + 0.5;
+                filter_parts.push(format!(
+                    "[{index}:a]pan=stereo|c0={left_gain:.3}*c0|c1={right_gain:.3}*c0[s{index}]"
+                ));
+                mix_refs.push_str(&format!("[s{index}]"));
+            }
+            filter_parts.push(format!(
+                "{mix_refs}amix=inputs={}:normalize=0[out]",
+                inputs.len()
+            ));
+            let filter_complex = filter_parts.join(";");
+
+            args.push("-filter_complex".to_string());
+            args.push(filter_complex);
+            args.push("-map".to_string());
+            args.push("[out]".to_string());
+            args.push("-c:a".to_string());
+            args.push("pcm_s24le".to_string());
+            args.push(format!("{output_base_dir}/{output_file_name}"));
+
+            Ok(FFmpegCommand {
+                binary: ffmpeg_bin.to_string(),
+                args,
+                description: "Mixer plusieurs pistes vers stereo avec panoramique".to_string(),
+                step_name: "processing:mixToStereoPanned".to_string(),
+            })
+        }
         ProcessingOperation::MergeToStereo {
             input_left_track_id,
             input_right_track_id,
